@@ -140,3 +140,4 @@ class NaivePortfolio(Portfolio):
 
     def create_tearsheet(self):
         self.create_equity_curve_dataframe()
+        self.equity_curve['returns'].plot()

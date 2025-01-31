@@ -1,0 +1,1 @@
+portfolio.equity_curve['returns'].plot()
