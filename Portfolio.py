@@ -1,7 +1,7 @@
 import datetime
 import numpy as np
 import pandas as pd
-import matplotlib
+import matplotlib.pyplot as plt
 import queue
 
 from abc import ABCMeta, abstractmethod
@@ -141,3 +141,5 @@ class NaivePortfolio(Portfolio):
     def create_tearsheet(self):
         self.create_equity_curve_dataframe()
         self.equity_curve['returns'].plot()
+        self.equity_curve['equity_curve'].plot()
+        plt.show()
