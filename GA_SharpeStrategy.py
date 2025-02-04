@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from Data import HistoricDataHandler
 from strategy import Strategy
 from ModularPortfolio import MPortfolio
@@ -27,19 +28,24 @@ class GA_SharpeStrategy(Strategy):
 
     def calculate_signals(self, event):
         if event.type == 'MARKET':
+            l = 0
             for s in self.symbol_list:
                 bars = self.bars.get_latest_bars(s, N=1)[0][1]
                 self.data[s].append(bars)   # update each symbol price on market event
+                l=len(self.data[s])
             # Calculate optimal allocation
             #print(pd.DataFrame(self.data))
-            Best = GA(32, len(self.symbol_list), 2, pd.DataFrame(self.data))
+            Best = 1/len(self.data) * np.ones(len(self.data))
+            if l >= 3:
+                Best = GA(32, len(self.symbol_list), 20, pd.DataFrame(self.data))
             print("Best: " + str(Best))
             i=0
-            for s in self.symbol_list:
-                signal = ComplexSignalEvent(s, self.bars.get_latest_bars(s, N=1)[0][0], .12, 'GA')
-                self.events.put(signal)
-                #print(Best[i])
-                i=i+1
+            if len(Best) > 0:
+                for s in self.symbol_list:
+                    signal = ComplexSignalEvent(s, self.bars.get_latest_bars(s, N=1)[0][0], Best[i], 'GA')
+                    self.events.put(signal)
+                    #print(Best[i])
+                    i=i+1
 
 if __name__ == "__main__":
     q = queue.Queue()
@@ -76,6 +82,7 @@ if __name__ == "__main__":
     print('AAPL: ' + str(portfolio.current_positions['AAPL']) + " NVDA: " + str(portfolio.current_positions['NVDA']) + 
         ' IONQ: ' + str(portfolio.current_positions['IONQ']))
     portfolio.create_tearsheet()
+    print(portfolio.current_holdings['total'])
     #for i in range(0, len(portfolio.all_holdings)):
     #    print('AAPL: ' + str(portfolio.all_holdings[i]['AAPL']))
     #print(strategy.data['AAPL'])

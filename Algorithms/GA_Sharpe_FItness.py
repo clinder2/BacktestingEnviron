@@ -27,6 +27,7 @@ def GA(popSize, numPlays, generations, prices):
     bestFitness = max(data)
     BEST = []
     for i in range(0, generations):
+        #print("GA- " + str(BEST))
         chromPop = np.array(chromPop)
         data = []
         for i in chromPop.T:
@@ -103,7 +104,7 @@ def GA(popSize, numPlays, generations, prices):
                 temp = temp + chromPop[row][t]
             for row in range(0, numPlays+1):
                 chromPop[row][t] /= temp """
-        print("fitness: " + str(bestFitness))
+        #print("fitness: " + str(bestFitness))
         """ for t in range(0, popSize):
             print(chromPop[:,t])
         for t in range(0, popSize):
