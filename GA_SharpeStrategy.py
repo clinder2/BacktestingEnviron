@@ -49,7 +49,7 @@ class GA_SharpeStrategy(Strategy):
 
 if __name__ == "__main__":
     q = queue.Queue()
-    temp = HistoricDataHandler(q, "2025-01-01", "2025-01-31", ["AAPL", "NVDA", "IONQ"])
+    temp = HistoricDataHandler(q, "2025-01-01", "2025-02-04", ["AAPL", "NVDA", "IONQ", 'PLTR'])
     #temp.update_bars()
     strategy = GA_SharpeStrategy(temp, q)
     portfolio = MPortfolio(temp, q, '2025-01-01', 1000)
