@@ -25,6 +25,13 @@ class MPortfolio(NaivePortfolio):
             else:
                 order = OrderEvent(symbol, order_type, quantity, 'BUY')
                 print(str(symbol) + " buy, " + str(quantity) + ", cost: " + str(cost) + ", " + str(allocation))
+        elif algo == 'MR':
+            print(ord_quantity)
+            #cost = self.bars.get_latest_bars(symbol)[0][1]
+            if ord_quantity == 1:
+                order = OrderEvent(symbol, order_type, 1, 'BUY')
+            else:
+                order = OrderEvent(symbol, order_type, 0 if curr_quantity==0 else 1, 'SELL')
 
         """ if direction == 'LONG' and curr_quantity == 0:
             order = OrderEvent(symbol, order_type, ord_quantity, 'BUY')

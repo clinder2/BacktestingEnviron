@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import yfinance as yf
 from queue import Queue
+import matplotlib.pyplot as plt
 
 from abc import ABCMeta, abstractmethod
 
@@ -73,6 +74,17 @@ class HistoricDataHandler(DataHandler):
                 if bar is not None:
                     self.latest_symbol_data[s].append(bar)
         self.events.put(MarketEvent())
+
+    """ def BollingerPlot(self, symbol):
+        lookback=10
+        if len(self.latest_symbol_data[symbol]) >= lookback:
+            print(self.latest_symbol_data[symbol])
+            d = pd.DataFrame(self.latest_symbol_data[symbol]).rolling(lookback).mean()
+            #upper = self.upper.dropna()
+            #lower = self.lower.dropna()
+            #plt.plot(upper)
+            plt.plot(d)
+            plt.show() """
 
 if __name__ == "__main__":
     q = Queue()
