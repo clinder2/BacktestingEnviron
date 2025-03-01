@@ -4,11 +4,55 @@ from strategy import BuyandHoldStrategy
 from Data import HistoricDataHandler
 from Execution import SimulatedExecutionHandler
 from Event import MarketEvent, SignalEvent, OrderEvent, fillEvent
+from GA_SharpeStrategy import GA_SharpeStrategy
+from MeanReversionStrategy import MRStrategy
+from ModularPortfolio import MPortfolio
 
 import queue
 
+def While(assets, algo, start, end, init_Cap):
+    q = queue.Queue()
+    temp = HistoricDataHandler(q, start, end, assets)
+    portfolio = MPortfolio(temp, q, start, init_Cap)
+    strategy = None
+    match algo:
+        case 'GA':
+            strategy = GA_SharpeStrategy(temp, q)
+        case 'MA':
+            strategy = MRStrategy(temp, q)
+    executor = SimulatedExecutionHandler(q)
+    testing = True
+    i = 0
+    while testing:
+        i = i + 1
+        #print('i: ' + str(i))
+        temp.update_bars()
+        if not temp.continue_backtest:
+            testing = False
+        while not q.empty():
+            event = q.get()
+            #print(event==None)
+            #print(event.type)
+            if event.type == 'MARKET':
+                portfolio.update_timeindex(event)
+                strategy.calculate_signals(event)
+            elif event.type == 'SIGNAL':
+                portfolio.update_signal(event)
+            elif event.type == 'ORDER':
+                executor.execute_order(event)
+            elif event.type == 'FILL':
+                portfolio.update_fill(event)
+            #print(portfolio.current_holdings['cash'])
+    #print('AAPL: ' + str(portfolio.current_holdings['AAPL']) + " NVDA: " + str(portfolio.current_holdings['NVDA']) + 
+    #    ' IONQ: ' + str(portfolio.current_holdings['IONQ']))
+    #print('AAPL: ' + str(portfolio.current_positions['AAPL']) + " NVDA: " + str(portfolio.current_positions['NVDA']) + 
+    #    ' IONQ: ' + str(portfolio.current_positions['IONQ']))
+    portfolio.create_tearsheet()
+    print(portfolio.current_holdings['total'])
+
 if __name__ == "__main__":
-    events = queue.Queue()
+    While(['AAPL', 'NVDA'], 'MA', '2024-01-01', '2025-02-01', 1000)
+    """ events = queue.Queue()
     handler = HistoricDataHandler(events, '2024-01-01', '2024-02-01', ['AAPL'])
     handler.update_bars()
     strategy = BuyandHoldStrategy(bars=handler, events=events)
@@ -39,4 +83,4 @@ if __name__ == "__main__":
                     elif event.type == 'FILL':
                         portfolio.update_fill(event)
         #print(portfolio.current_holdings)
-        #print(handler.get_latest_bars('AAPL'))
+        #print(handler.get_latest_bars('AAPL')) """
