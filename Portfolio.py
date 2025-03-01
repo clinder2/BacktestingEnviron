@@ -2,6 +2,8 @@ import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import matplotlib.dates as mdates
 import queue
 
 from abc import ABCMeta, abstractmethod
@@ -97,7 +99,7 @@ class NaivePortfolio(Portfolio):
         self.current_holdings['commission'] += fill.commission
         self.current_holdings['cash'] -= (cost + fill.commission)
         self.current_holdings['total'] -= (cost + fill.commission)
-
+        
     def update_fill(self, event):
         if event.type == 'FILL':
             self.update_positions_from_fill(event)
@@ -139,7 +141,28 @@ class NaivePortfolio(Portfolio):
         self.equity_curve = curve
 
     def create_tearsheet(self):
+        figure, (ax, ax2) = plt.subplots(2, 1)
+        #ax=plt.gca()
+        #ax2=plt.gca()
         self.create_equity_curve_dataframe()
-        self.equity_curve['returns'].plot()
-        self.equity_curve['equity_curve'].plot()
+        #self.equity_curve['returns'].plot()
+        #self.equity_curve['equity_curve'].plot()
+        ax.xaxis.set_tick_params(reset=True)
+        ax.yaxis.grid(linestyle=':')
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+        ax.xaxis.grid(linestyle=':')
+        self.equity_curve['equity_curve'].plot(color='green', ax=ax)
+        ax.axhline(1.0, linestyle='--', color='black')
+        plt.setp(ax.get_xticklabels(), visible=True, ha='center')
+        ax.grid(axis='both')
+        l=len(self.equity_curve['equity_curve'])
+        hwm=np.zeros(l)
+        for i in range(1, l):
+            hwm[i]=max(hwm[i-1], self.equity_curve['equity_curve'].iloc[i])
+        dd = (hwm-self.equity_curve['equity_curve'])/hwm
+        underwater=-dd
+        ax2.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+        ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+        underwater.plot(ax=ax2, kind='area', alpha=.3, color='red')
         plt.show()

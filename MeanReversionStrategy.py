@@ -42,10 +42,8 @@ class MRStrategy(Strategy):
                 #print('U: ' + str(self.upper[s]))
                 #print('L: ' + str(self.lower[s]))
                 if self.upper[s] <= cost:
-                    print("s")
                     signal = ComplexSignalEvent(s, self.bars.get_latest_bars(s, N=1)[0][0], -1, 'MR')
                 elif self.lower[s] >= cost:
-                    print('b')
                     signal = ComplexSignalEvent(s, self.bars.get_latest_bars(s, N=1)[0][0], 1, 'MR')
                 if signal != None:
                     self.events.put(signal)
@@ -86,24 +84,24 @@ class MRStrategy(Strategy):
 
 if __name__ == "__main__":
     q = queue.Queue()
-    temp = HistoricDataHandler(q, "2025-01-01", "2025-02-28", ["AAPL", "NVDA", "IONQ", 'PLTR'])
+    temp = HistoricDataHandler(q, "2024-01-01", "2025-02-28", ["AAPL", "NVDA", "IONQ", 'PLTR'])
     #temp.update_bars()
     strategy = MRStrategy(temp, q)
-    portfolio = MPortfolio(temp, q, '2025-01-01', 1000)
+    portfolio = MPortfolio(temp, q, '2024-01-01', 1000)
     executor = SimulatedExecutionHandler(q)
     #print(strategy.data['AAPL'])
     first = True
     i = 0
     while first:
         i = i + 1
-        print('i: ' + str(i))
+        #print('i: ' + str(i))
         temp.update_bars()
         if not temp.continue_backtest:
             first = False
         while not q.empty():
             event = q.get()
             #print(event==None)
-            print(event.type)
+            #print(event.type)
             if event.type == 'MARKET':
                 portfolio.update_timeindex(event)
                 strategy.calculate_signals(event)
@@ -119,5 +117,5 @@ if __name__ == "__main__":
         ' IONQ: ' + str(portfolio.current_holdings['IONQ']))
     print('AAPL: ' + str(portfolio.current_positions['AAPL']) + " NVDA: " + str(portfolio.current_positions['NVDA']) + 
         ' IONQ: ' + str(portfolio.current_positions['IONQ']))
-    #portfolio.create_tearsheet()
+    portfolio.create_tearsheet()
     print(portfolio.current_holdings['total'])
