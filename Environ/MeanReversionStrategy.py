@@ -1,14 +1,14 @@
 import pandas as pd
 import numpy as np
-from Data import HistoricDataHandler
-from strategy import Strategy
-from ModularPortfolio import MPortfolio
-from Execution import SimulatedExecutionHandler
+from Environ.Data import HistoricDataHandler
+from Environ.strategy import Strategy
+from Environ.ModularPortfolio import MPortfolio
+from Environ.Execution import SimulatedExecutionHandler
 import sys
 sys.path.insert(0, '/Users/christopherlinder/Desktop/MonteCarloFinance/UtilityFunctions/GA_Sharpe_Fitness')
 import matplotlib.pyplot as plt
 
-from Event import SignalEvent, ComplexSignalEvent
+from Environ.Event import SignalEvent, ComplexSignalEvent
 
 import queue
 
@@ -29,6 +29,7 @@ class MRStrategy(Strategy):
         if event.type == 'MARKET':
             for s in self.symbol_list:
                 bars = self.bars.get_latest_bars(s, N=1)[0][1]
+                #print('s bars: ' + str(bars) + ', ' + str(s))
                 self.data[s].append(bars)   # update each symbol price on market event
             for s in self.symbol_list:
                 self.updateSMA(s)
@@ -84,7 +85,7 @@ class MRStrategy(Strategy):
 
 if __name__ == "__main__":
     q = queue.Queue()
-    temp = HistoricDataHandler(q, "2024-01-01", "2025-02-28", ["AAPL", "NVDA", "IONQ", 'PLTR'])
+    temp = HistoricDataHandler(q, "2024-02-25", "2025-03-6", ["AAPL", "NVDA", "IONQ", 'PLTR'])
     #temp.update_bars()
     strategy = MRStrategy(temp, q)
     portfolio = MPortfolio(temp, q, '2024-01-01', 1000)

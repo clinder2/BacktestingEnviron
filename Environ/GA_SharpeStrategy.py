@@ -1,15 +1,17 @@
 import pandas as pd
 import numpy as np
-from Data import HistoricDataHandler
-from strategy import Strategy
-from ModularPortfolio import MPortfolio
-from Execution import SimulatedExecutionHandler
+from Environ.Data import HistoricDataHandler
+from Environ.strategy import Strategy
+from Environ.ModularPortfolio import MPortfolio
+from Environ.Execution import SimulatedExecutionHandler
 import sys
-sys.path.insert(0, '/Users/christopherlinder/Desktop/MonteCarloFinance/UtilityFunctions/GA_Sharpe_Fitness')
+#sys.path.insert(0, '../Algorithms/GA_Sharpe_Fitness')
 import matplotlib.pyplot as plt
-from Algorithms.GA_Sharpe_FItness import GA
+import Algorithms.GA_Sharpe_FItness as A
+#import GA_Sharpe_FItness as A
+#from Algorithms.GA_Sharpe_FItness import GA
 
-from Event import SignalEvent, ComplexSignalEvent
+from Environ.Event import SignalEvent, ComplexSignalEvent
 
 import queue
 
@@ -25,7 +27,7 @@ class GA_SharpeStrategy(Strategy):
         self.data = dict((k,v) for k,v in [(s, None) for s in self.symbol_list])
         for s in self.symbol_list:
             self.data[s] = self.bars.get_latest_bars(s)    # init database to price at instantiation
-
+        
     def calculate_signals(self, event):
         if event.type == 'MARKET':
             l = 0
@@ -37,7 +39,7 @@ class GA_SharpeStrategy(Strategy):
             #print(pd.DataFrame(self.data))
             Best = 1/len(self.data) * np.ones(len(self.data))
             if l >= 3:
-                Best = GA(32, len(self.symbol_list), 20, pd.DataFrame(self.data))
+                Best = A.GA(32, len(self.symbol_list), 20, pd.DataFrame(self.data))
             print("Best: " + str(Best))
             i=0
             if len(Best) > 0:

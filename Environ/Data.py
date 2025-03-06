@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from abc import ABCMeta, abstractmethod
 
-from Event import MarketEvent
+from Environ.Event import MarketEvent
 
 class DataHandler(object):
     __metaclass__ = ABCMeta
@@ -43,7 +43,7 @@ class HistoricDataHandler(DataHandler):
     """
     def _pull_process_symbols(self):
         for s in self.symbol_list:
-            data = yf.download(s, start = self.start, end=self.end)
+            data = yf.download(s, start = self.start, end=self.end, interval='1d')
             self.symbol_data[s] = {}
             data = pd.DataFrame(data)
             self.symbol_data[s] = data

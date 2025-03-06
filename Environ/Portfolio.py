@@ -9,7 +9,7 @@ import queue
 from abc import ABCMeta, abstractmethod
 from math import floor
 
-from Event import fillEvent, OrderEvent
+from Environ.Event import fillEvent, OrderEvent
 
 class Portfolio(object):
     __metaclass__ = ABCMeta
@@ -99,7 +99,7 @@ class NaivePortfolio(Portfolio):
         self.current_holdings['commission'] += fill.commission
         self.current_holdings['cash'] -= (cost + fill.commission)
         self.current_holdings['total'] -= (cost + fill.commission)
-        
+        #print('p bars: ' + str(fill_cost) + ', ' + str(fill.symbol))
     def update_fill(self, event):
         if event.type == 'FILL':
             self.update_positions_from_fill(event)

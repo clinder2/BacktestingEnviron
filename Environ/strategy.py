@@ -5,7 +5,7 @@ import queue
 
 from abc import ABCMeta, abstractmethod
 
-from Event import SignalEvent
+from Environ.Event import SignalEvent
 
 class Strategy(object):
     __metaclass__ = ABCMeta

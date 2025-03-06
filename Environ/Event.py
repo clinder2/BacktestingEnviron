@@ -31,7 +31,7 @@ class OrderEvent(Event):
     def printOrder(self):
         print("Symbol: " + str(self.symbol) + ", Type: " + str(self.type) + 
               ", Quantity: " + str(self.quantity) + "Direction: " + str(self.direction))
-
+        
 class fillEvent(Event):
     def __init__(self, timeindex, symbol, exchange, quantity, direction, fill_cost, commission=None):
         self.type = 'FILL'

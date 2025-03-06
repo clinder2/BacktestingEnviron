@@ -1,12 +1,12 @@
-from Execution import ExecutionHandler
-from Portfolio import NaivePortfolio
-from strategy import BuyandHoldStrategy
-from Data import HistoricDataHandler
-from Execution import SimulatedExecutionHandler
-from Event import MarketEvent, SignalEvent, OrderEvent, fillEvent
-from GA_SharpeStrategy import GA_SharpeStrategy
-from MeanReversionStrategy import MRStrategy
-from ModularPortfolio import MPortfolio
+from Environ.Execution import ExecutionHandler
+from Environ.Portfolio import NaivePortfolio
+from Environ.strategy import BuyandHoldStrategy
+from Environ.Data import HistoricDataHandler
+from Environ.Execution import SimulatedExecutionHandler
+from Environ.Event import MarketEvent, SignalEvent, OrderEvent, fillEvent
+from Environ.GA_SharpeStrategy import GA_SharpeStrategy
+from Environ.MeanReversionStrategy import MRStrategy
+from Environ.ModularPortfolio import MPortfolio
 
 import queue
 
@@ -30,6 +30,7 @@ def While(assets, algo, start, end, init_Cap):
         if not temp.continue_backtest:
             testing = False
         while not q.empty():
+            #print(str(i) + ', ' + str(temp.get_latest_bars('AAPL')))
             event = q.get()
             #print(event==None)
             #print(event.type)
@@ -51,7 +52,7 @@ def While(assets, algo, start, end, init_Cap):
     print(portfolio.current_holdings['total'])
 
 if __name__ == "__main__":
-    While(['AAPL', 'NVDA'], 'MA', '2024-01-01', '2025-02-01', 1000)
+    While(['AAPL', 'NVDA'], 'MA', '2024-02-01', '2025-02-05', 1000)
     """ events = queue.Queue()
     handler = HistoricDataHandler(events, '2024-01-01', '2024-02-01', ['AAPL'])
     handler.update_bars()
