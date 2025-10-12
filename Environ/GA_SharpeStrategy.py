@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from Environ.Data import HistoricDataHandler
-from Environ.strategy import Strategy
-from Environ.ModularPortfolio import MPortfolio
-from Environ.Execution import SimulatedExecutionHandler
+from Data import HistoricDataHandler
+from strategy import Strategy
+from ModularPortfolio import MPortfolio
+from Execution import SimulatedExecutionHandler
 import sys
 #sys.path.insert(0, '../Algorithms/GA_Sharpe_Fitness')
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ import Algorithms.GA_Sharpe_FItness as A
 #import GA_Sharpe_FItness as A
 #from Algorithms.GA_Sharpe_FItness import GA
 
-from Environ.Event import SignalEvent, ComplexSignalEvent
+from Event import SignalEvent, ComplexSignalEvent
 
 import queue
 

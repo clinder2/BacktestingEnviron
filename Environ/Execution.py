@@ -3,7 +3,7 @@ import queue
 
 from abc import ABCMeta, abstractmethod
 
-from Environ.Event import fillEvent, OrderEvent
+from Event import fillEvent, OrderEvent
 
 class ExecutionHandler(object):
     __metaclass__ = ABCMeta

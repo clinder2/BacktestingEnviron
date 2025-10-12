@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 
 sys.path.insert(1, '/Users/christopherlinder/Desktop/CLBranch/BacktestingEnviron/Environ/While.py')
 sys.path.insert(1, '/../BacktestingEnviron/Environ/While.py')
-import Environ.While
+import Environ.While as W
 
 class window(QWidget):
     def __init__(self, parent=None):
@@ -13,6 +13,7 @@ class window(QWidget):
         self.resize(200,50)
 
 def main():
+    #W.While(['AAPL', 'NVDA'], 'MA', '2024-02-01', '2025-02-05', 1000)
     app = QApplication(sys.argv)
     ex=window()
     ex.show()

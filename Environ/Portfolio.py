@@ -9,7 +9,7 @@ import queue
 from abc import ABCMeta, abstractmethod
 from math import floor
 
-from Environ.Event import fillEvent, OrderEvent
+from Event import fillEvent, OrderEvent
 
 class Portfolio(object):
     __metaclass__ = ABCMeta

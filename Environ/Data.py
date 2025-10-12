@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from abc import ABCMeta, abstractmethod
 
-from Environ.Event import MarketEvent
+from Event import MarketEvent
 
 class DataHandler(object):
     __metaclass__ = ABCMeta
@@ -88,15 +88,17 @@ class HistoricDataHandler(DataHandler):
 
 if __name__ == "__main__":
     q = Queue()
-    temp = HistoricDataHandler(q, "2024-01-01", "2024-02-01", ["AAPL", "NVDA", "IONQ"])
+    """ temp = HistoricDataHandler(q, "2025-01-01", "2025-02-01", ["AAPL", "NVDA", "IONQ"])
     for i in range(0, 10):
         temp.update_bars()
         print(temp.get_latest_bars('AAPL'))
-    a = temp._get_new_bar("AAPL")
+    a = temp._get_new_bar("AAPL") """
+    data=yf.download(["AAPL", "NVDA", "IONQ"], "2025-01-01", "2025-02-01")
+    #data.to_csv('test.csv')
     #print(a)
     #print(a.__next__())
     #print(a.__next__())
-    b = temp.latest_symbol_data["AAPL"]
+    #b = temp.latest_symbol_data["AAPL"]
     #print(temp.symbol_data['AAPL'])
     #print(a)
     #print(b[0][1])

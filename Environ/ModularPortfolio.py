@@ -1,7 +1,7 @@
 import numpy as np
-from Environ.Portfolio import NaivePortfolio
+from Portfolio import NaivePortfolio
 
-from Environ.Event import ComplexSignalEvent, OrderEvent
+from Event import ComplexSignalEvent, OrderEvent
 
 class MPortfolio(NaivePortfolio):
     def generate_order(self, signal):

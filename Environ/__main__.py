@@ -12,7 +12,7 @@ from Environ.While import While
 
 import queue
 
-While(['AAPL', 'NVDA'], 'MA', '2024-02-01', '2025-02-05', 1000)
+While(['AAPL', 'NVDA', 'PLTR'], 'MA', '2025-01-01', '2025-04-08', 1000)
 
 """ q = queue.Queue()
 temp = HistoricDataHandler(q, "2025-01-01", "2025-02-04", ["AAPL", "NVDA", "IONQ", 'PLTR'])
