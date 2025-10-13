@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 import yfinance as yf
+import matplotlib.pyplot as plt
 
 def retrieve_data(start, end, assets, freq, fields=['Dividends','Close','Open','Volume']):
     data = yf.download(assets, start, end, freq)
     header=pd.MultiIndex.from_product([fields, assets],names=['attr','asset'])
     inx=pd.date_range(start,end,freq='30min')
-    print(data)
     dataset=pd.DataFrame(columns=header,index=inx)
     for f in fields:
         for a in assets:
@@ -23,9 +23,23 @@ def add_vwap(frame,assets):
     for a in assets:
         frame.loc[:,('VWAP',a)]=np.cumsum(frame['Close'][a]*frame['Volume'][a])/np.cumsum(frame['Volume'][a])
 
+def vwap(group):
+    return (group['Close']*group['Volume']).sum()/group['Volume'].sum()
+
+def vwap_bymonth(frame: pd.DataFrame,assets):
+    month_vwap=pd.DataFrame()
+    month_vwap2=pd.DataFrame()
+    month_vwap2.index=frame.index.copy()
+    for a in assets:
+        month_vwap2['Close']=frame['Close'][a]
+        month_vwap2['Volume']=frame['Volume'][a]
+        month_vwap[a]=month_vwap2.groupby([month_vwap2.index.year,month_vwap2.index.month]).apply(vwap)
+    del month_vwap2
+    return month_vwap
+
 if __name__=='__main__':
     data=retrieve_data("2025-01-1", "2025-10-10", ["AAPL", "NVDA", "IONQ", "PLTR"], '1h')
     add_sma(data, ['AAPL'], 30)
     add_vwap(data,['AAPL'])
-    print(data)
+    print(vwap_bymonth(data,['AAPL','IONQ']))
     
